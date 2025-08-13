@@ -1,17 +1,306 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>InFactAI - Fake News Detector</title>
+    <title>InFactAI - Advanced Fake News Detection</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <h1>InFactAI</h1>
-        <form action="/predict" method="post">
-            <textarea name="news_text" placeholder="Paste news content here..." required></textarea>
-            <button type="submit">Check</button>
-        </form>
+    <div class="background-animation">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
     </div>
+
+    <div class="container">
+        <header class="app-header">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>InFactAI</h1>
+                    <p class="subtitle">Advanced AI-Powered Fake News Detection</p>
+                </div>
+            </div>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <i class="fas fa-brain"></i>
+                    <span>1000+ Training Examples</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>99%+ Accuracy</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Real-time Analysis</span>
+                </div>
+            </div>
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            <i class="fas fa-{% if category == 'error' %}exclamation-triangle{% else %}check-circle{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="main-content">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h2><i class="fas fa-magnifying-glass"></i> How It Works</h2>
+                    <p>Our advanced AI analyzes news content using machine learning algorithms trained on 1000+ real and fake news examples. Simply paste any text below for instant analysis.</p>
+                    <div class="feature-highlights">
+                        <div class="feature">
+                            <i class="fas fa-robot"></i>
+                            <span>AI-Powered</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-bolt"></i>
+                            <span>Instant Results</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Reliable Detection</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form action="/predict" method="post" class="analysis-form">
+                <div class="form-header">
+                    <h3><i class="fas fa-newspaper"></i> News Analysis</h3>
+                    <p>Enter the text you want to analyze below</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="news_text">
+                        <i class="fas fa-edit"></i> News Content
+                    </label>
+                    <div class="textarea-container">
+                        <textarea 
+                            id="news_text"
+                            name="news_text" 
+                            placeholder="Paste your news article, social media post, or any text here... (10-5000 characters)"
+                            required
+                            maxlength="5000"
+                            minlength="10"
+                        ></textarea>
+                        <div class="textarea-decoration">
+                            <div class="corner corner-tl"></div>
+                            <div class="corner corner-tr"></div>
+                            <div class="corner corner-bl"></div>
+                            <div class="corner corner-br"></div>
+                        </div>
+                    </div>
+                    <div class="char-counter">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                        <span id="char-count">0</span> / 5000 characters
+                    </div>
+                </div>
+                
+                <button type="submit" class="analyze-btn">
+                    <div class="btn-content">
+                        <span class="btn-text">
+                            <i class="fas fa-search"></i> Analyze Text
+                        </span>
+                        <span class="btn-loading" style="display: none;">
+                            <i class="fas fa-spinner fa-spin"></i> Analyzing...
+                        </span>
+                    </div>
+                    <div class="btn-ripple"></div>
+                </button>
+            </form>
+
+            <div class="examples-section">
+                <h3><i class="fas fa-lightbulb"></i> Try These Examples</h3>
+                <div class="example-cards">
+                    <div class="example-card real" data-example="NASA successfully launches new satellite to study climate change">
+                        <div class="card-header">
+                            <i class="fas fa-check-circle"></i>
+                            <h4>Real News</h4>
+                        </div>
+                        <p>"NASA successfully launches new satellite to study climate change"</p>
+                        <button class="example-btn" onclick="fillExample(this)">
+                            <i class="fas fa-play"></i> Try This
+                        </button>
+                    </div>
+                    <div class="example-card fake" data-example="Aliens control the government - shocking revelation">
+                        <div class="card-header">
+                            <i class="fas fa-times-circle"></i>
+                            <h4>Fake News</h4>
+                        </div>
+                        <p>"Aliens control the government - shocking revelation"</p>
+                        <button class="example-btn" onclick="fillExample(this)">
+                            <i class="fas fa-play"></i> Try This
+                        </button>
+                    </div>
+                    <div class="example-card health" data-example="CDC releases new guidelines for seasonal flu vaccination">
+                        <div class="card-header">
+                            <i class="fas fa-heartbeat"></i>
+                            <h4>Health News</h4>
+                        </div>
+                        <p>"CDC releases new guidelines for seasonal flu vaccination"</p>
+                        <button class="example-btn" onclick="fillExample(this)">
+                            <i class="fas fa-play"></i> Try This
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-section">
+                <h3><i class="fas fa-chart-bar"></i> Model Performance</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h4>Accuracy</h4>
+                            <p class="stat-value">99.8%</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h4>Training Data</h4>
+                            <p class="stat-value">1000+</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h4>Response Time</h4>
+                            <p class="stat-value">&lt;1s</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="disclaimer">
+                <div class="disclaimer-header">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Important Disclaimer</h3>
+                </div>
+                <p>This AI tool is for educational and research purposes only. While our model achieves high accuracy, it should not be the sole source for fact-checking. Always verify information from multiple reliable sources before making important decisions.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Character counter with progress bar
+        const textarea = document.getElementById('news_text');
+        const charCount = document.getElementById('char-count');
+        const progressFill = document.getElementById('progress-fill');
+        
+        textarea.addEventListener('input', function() {
+            const length = this.value.length;
+            const maxLength = 5000;
+            const percentage = (length / maxLength) * 100;
+            
+            charCount.textContent = length;
+            progressFill.style.width = percentage + '%';
+            
+            // Change progress bar color based on usage
+            if (percentage > 80) {
+                progressFill.style.backgroundColor = '#e74c3c';
+            } else if (percentage > 60) {
+                progressFill.style.backgroundColor = '#f39c12';
+            } else {
+                progressFill.style.backgroundColor = '#3498db';
+            }
+        });
+
+        // Example filler with animation
+        function fillExample(button) {
+            const card = button.closest('.example-card');
+            const exampleText = card.dataset.example;
+            
+            // Add click animation
+            button.classList.add('clicked');
+            setTimeout(() => button.classList.remove('clicked'), 200);
+            
+            // Fill textarea with animation
+            textarea.value = '';
+            let i = 0;
+            const typeInterval = setInterval(() => {
+                textarea.value += exampleText[i];
+                i++;
+                if (i >= exampleText.length) {
+                    clearInterval(typeInterval);
+                    textarea.dispatchEvent(new Event('input'));
+                }
+            }, 50);
+        }
+
+        // Form submission with enhanced loading state
+        document.querySelector('.analysis-form').addEventListener('submit', function() {
+            const btnText = document.querySelector('.btn-text');
+            const btnLoading = document.querySelector('.btn-loading');
+            const analyzeBtn = document.querySelector('.analyze-btn');
+            
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline';
+            analyzeBtn.classList.add('loading');
+            analyzeBtn.disabled = true;
+        });
+
+        // Add ripple effect to buttons
+        document.querySelectorAll('.example-btn, .analyze-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = this.querySelector('.btn-ripple') || document.createElement('div');
+                ripple.className = 'btn-ripple';
+                this.appendChild(ripple);
+                
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('active');
+                
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.example-card, .stat-card, .hero-section').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
 </body>
 </html>

@@ -1,16 +1,156 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>InFactAI - Result</title>
+    <title>Analysis Result - InFactAI</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Prediction Result</h1>
-        <p><strong>News:</strong> {{ news_text }}</p>
-        <p><strong>Prediction:</strong> {{ prediction }}</p>
-        <a href="/">Go Back</a>
+    <div class="background-animation">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+        </div>
     </div>
+
+    <div class="container">
+        <header class="app-header">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>InFactAI</h1>
+                    <p class="subtitle">Advanced AI-Powered Fake News Detection</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="result-container">
+                <div class="result-header">
+                    <div class="result-icon">
+                        <i class="fas fa-{% if 'FAKE' in prediction %}times-circle{% else %}check-circle{% endif %}"></i>
+                    </div>
+                    <h2>Analysis Complete!</h2>
+                    <p>Your text has been analyzed using our advanced AI model</p>
+                </div>
+                
+                <div class="result-details">
+                    <div class="prediction-section">
+                        <h3><i class="fas fa-bullseye"></i> Prediction Result</h3>
+                        <div class="prediction-badge {{ 'fake' if 'FAKE' in prediction else 'real' }}">
+                            <i class="fas fa-{% if 'FAKE' in prediction %}times{% else %}check{% endif %}"></i>
+                            {{ prediction }}
+                        </div>
+                        <p class="prediction-description">
+                            {% if 'FAKE' in prediction %}
+                                This text appears to contain characteristics commonly associated with fake news or misinformation.
+                            {% else %}
+                                This text appears to contain characteristics commonly associated with legitimate, factual news.
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div class="confidence-section">
+                        <h3><i class="fas fa-chart-line"></i> Confidence Level</h3>
+                        <div class="confidence-display">
+                            <div class="confidence-circle">
+                                <svg viewBox="0 0 120 120" class="confidence-svg">
+                                    <circle cx="60" cy="60" r="54" fill="none" stroke="#e1e5e9" stroke-width="8"/>
+                                    <circle cx="60" cy="60" r="54" fill="none" stroke="{{ '#e74c3c' if 'FAKE' in prediction else '#27ae60' }}" 
+                                            stroke-width="8" stroke-dasharray="{{ confidence_score|replace('%', '')|float * 3.39 }}" 
+                                            stroke-dashoffset="169.56" class="confidence-progress"/>
+                                </svg>
+                                <div class="confidence-text">
+                                    <span class="confidence-score">{{ confidence_score }}</span>
+                                    <span class="confidence-label">{{ confidence_label }}</span>
+                                </div>
+                            </div>
+                            <div class="confidence-info">
+                                <div class="info-item">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>Model confidence in this prediction</span>
+                                </div>
+                                <div class="info-item">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <span>Higher confidence indicates stronger model certainty</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analyzed-text">
+                        <h3><i class="fas fa-file-text"></i> Analyzed Content</h3>
+                        <div class="text-content">
+                            <div class="text-header">
+                                <span class="text-length">{{ news_text|length }} characters</span>
+                                <span class="text-type">News Article</span>
+                            </div>
+                            <div class="text-body">
+                                {{ news_text }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-section">
+                    <div class="action-buttons">
+                        <a href="/" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Analyze Another Text
+                        </a>
+                        <button onclick="window.history.back()" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Go Back
+                        </button>
+                    </div>
+                    
+                    <div class="result-tips">
+                        <h4><i class="fas fa-lightbulb"></i> Tips for Better Analysis</h4>
+                        <ul>
+                            <li>Provide complete context and full articles when possible</li>
+                            <li>Include source information for more accurate results</li>
+                            <li>Consider the date and timeliness of the information</li>
+                            <li>Always verify from multiple reliable sources</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add entrance animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.result-header, .prediction-section, .confidence-section, .analyzed-text, .action-section');
+            
+            elements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(20px)';
+                    el.style.transition = 'all 0.6s ease';
+                    
+                    setTimeout(() => {
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 200);
+            });
+        });
+
+        // Add hover effects to buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
 </body>
 </html>
