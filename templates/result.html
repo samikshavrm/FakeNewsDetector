@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>InFactAI - Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+<body>
+    <div class="container">
+        <h1>Prediction Result</h1>
+        <p><strong>News:</strong> {{ news_text }}</p>
+        <p><strong>Prediction:</strong> {{ prediction }}</p>
+        <a href="/">Go Back</a>
+    </div>
+</body>
+</html>
