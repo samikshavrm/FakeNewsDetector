@@ -93,5 +93,6 @@ def predict():
         flash("An error occurred while analyzing the text. Please try again.", "error")
         return redirect(url_for('index'))
 
-if __name__ == "__main__":
-    app.run(debug=True, port=8080)
+# For Vercel deployment - remove the main block
+# if __name__ == "__main__":
+#     app.run(debug=True, port=8080)
