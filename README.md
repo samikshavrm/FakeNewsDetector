@@ -43,34 +43,6 @@ python app.py
 - Render account
 - Git repository (GitHub, GitLab, etc.)
 
-### Deployment Steps
-
-1. **Sign up for Render**: Go to [render.com](https://render.com)
-
-2. **Connect your repository**:
-   - Click "New +" → "Web Service"
-   - Connect your Git repository
-   - Select your `FakeNewsDetector` repository
-
-3. **Configure the service**:
-   - **Name**: `fake-news-detector`
-   - **Environment**: `Python 3`
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn app:app`
-
-4. **Deploy**: Click "Create Web Service"
-
-5. **Wait for build** (usually 5-10 minutes)
-
-### Why Render?
-
-- ✅ **No size limits** - Perfect for large ML models
-- ✅ **Python 3.9+ support** - Stable and reliable
-- ✅ **Easy deployment** - Simple web interface
-- ✅ **Automatic HTTPS** - Secure by default
-- ✅ **Better for ML** - Designed for data science workloads
-
-For detailed deployment instructions, see [RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md).
 
 ## Project Structure
 
@@ -94,14 +66,6 @@ The application uses:
 - **Features**: TF-IDF vectorization of text
 - **Input**: News article text (minimum 10 characters)
 - **Output**: Prediction (Real/Fake) with confidence score
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
 
 ## License
 
