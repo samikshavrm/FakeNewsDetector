@@ -36,56 +36,41 @@ python app.py
 
 4. Open your browser and navigate to `http://localhost:8080`
 
-## Deployment on Vercel
+## Deployment on Render
 
 ### Prerequisites
 
-- Vercel account
-- Vercel CLI installed
-- Git repository
+- Render account
+- Git repository (GitHub, GitLab, etc.)
 
 ### Deployment Steps
 
-1. **Install Vercel CLI** (if not already installed):
-```bash
-npm i -g vercel
-```
+1. **Sign up for Render**: Go to [render.com](https://render.com)
 
-2. **Login to Vercel**:
-```bash
-vercel login
-```
+2. **Connect your repository**:
+   - Click "New +" → "Web Service"
+   - Connect your Git repository
+   - Select your `FakeNewsDetector` repository
 
-3. **Deploy to Vercel**:
-```bash
-vercel
-```
+3. **Configure the service**:
+   - **Name**: `fake-news-detector`
+   - **Environment**: `Python 3`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn app:app`
 
-4. **Follow the prompts**:
-   - Set up and deploy: `Y`
-   - Which scope: Select your account
-   - Link to existing project: `N`
-   - Project name: `fake-news-detector` (or your preferred name)
-   - Directory: `.` (current directory)
-   - Override settings: `N`
+4. **Deploy**: Click "Create Web Service"
 
-5. **For production deployment**:
-```bash
-vercel --prod
-```
+5. **Wait for build** (usually 5-10 minutes)
 
-### Important Notes for Vercel Deployment
+### Why Render?
 
-- The app is configured for serverless deployment
-- Model files (`models/trained_model.pkl` and `vectorizers/tfidf_vectorizer.pkl`) must be included in your repository
-- Maximum function duration is set to 30 seconds
-- Python 3.9 runtime is specified
+- ✅ **No size limits** - Perfect for large ML models
+- ✅ **Python 3.9+ support** - Stable and reliable
+- ✅ **Easy deployment** - Simple web interface
+- ✅ **Automatic HTTPS** - Secure by default
+- ✅ **Better for ML** - Designed for data science workloads
 
-### Environment Variables (Optional)
-
-You can set environment variables in Vercel dashboard:
-- `FLASK_ENV`: Set to `production` for production deployment
-- `SECRET_KEY`: Custom secret key for Flask sessions
+For detailed deployment instructions, see [RENDER_DEPLOYMENT.md](RENDER_DEPLOYMENT.md).
 
 ## Project Structure
 
@@ -93,9 +78,9 @@ You can set environment variables in Vercel dashboard:
 FakeNewsDetector/
 ├── app.py                 # Main Flask application
 ├── requirements.txt       # Python dependencies
-├── vercel.json           # Vercel configuration
+├── render.yaml           # Render configuration
 ├── runtime.txt           # Python runtime specification
-├── models/               # Trained ML models
+├── models/               # ML models (no size limits!)
 ├── vectorizers/          # TF-IDF vectorizers
 ├── src/                  # Source code modules
 ├── templates/            # HTML templates
